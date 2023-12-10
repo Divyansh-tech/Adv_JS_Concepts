@@ -208,3 +208,185 @@ const person44 = {
     return inner();
   },
 };
+
+/* -------------------------------------------------------------------------- */
+/*                               //! Inheritance                              */
+/* -------------------------------------------------------------------------- */
+/* Inheritance is a mechanism that allows a class (or constructor function) to inherit properties and methods from another class, creating a hierarchy 
+ of classes. This is often achieved using the extends keyword and the super() function.
+*/
+// Parent class
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  eat() {
+    console.log(`${this.name} is eating.`);
+  }
+}
+
+// Child class inheriting from Animal
+class Dog extends Animal {
+  constructor(name, breed) {
+    console.log("before super", this); // give error: Uncaught ReferenceError: Must call super constructor in derived class before accessing 'this'
+    // super() is used to call the constructor of the parent class
+    super(name);
+    console.log("after super", this); // Output: after super Dog { name: 'providedName' }
+    this.breed = breed;
+  }
+
+  bark() {
+    console.log(`${this.name} is barking.`);
+  }
+}
+
+// Creating instances
+const myDog = new Dog("Buddy", "Golden Retriever");
+
+// Using methods from both parent and child classes
+myDog.eat(); // Output: Buddy is eating.
+myDog.bark(); // Output: Buddy is barking.
+console.log(myDog instanceof Dog); // Output: true
+
+/* -------------------------------------------------------------------------- */
+/*                         //! 4 Pillars of OOP in JS                         */
+/* -------------------------------------------------------------------------- */
+//! 1. Encapsulation
+// Encapsulation is the bundling of data (attributes) and methods (functions) that operate on the data into a single unit known as a class. It
+// involves the concept of information hiding, where the internal implementation details are concealed from the external world.
+class BankAccount {
+  constructor(balance) {
+    let _balance = balance; // Private attribute
+
+    this.getBalance = function () {
+      return _balance;
+    };
+
+    this.deposit = function (amount) {
+      _balance += amount;
+    };
+
+    this.withdraw = function (amount) {
+      if (amount <= _balance) {
+        _balance -= amount;
+      } else {
+        console.log("Insufficient funds.");
+      }
+    };
+  }
+}
+
+const account = new BankAccount(1000);
+console.log(account.getBalance()); // Output: 1000
+account.deposit(500);
+console.log(account.getBalance()); // Output: 1500
+account.withdraw(200);
+console.log(account.getBalance()); // Output: 1300
+
+//! 2. Abstraction
+// Abstraction involves simplifying complex systems by modeling classes based on the essential properties and behaviors, while hiding unnecessary
+// details. It focuses on defining a clear interface for interacting with objects, concealing the underlying complexity.
+class RemoteControl {
+  constructor(device) {
+    this.device = device;
+  }
+
+  // Abstract method
+  powerOn() {
+    throw new Error("powerOn method must be implemented by subclasses.");
+  }
+
+  // Abstract method
+  powerOff() {
+    throw new Error("powerOff method must be implemented by subclasses.");
+  }
+}
+
+class TVRemote extends RemoteControl {
+  powerOn() {
+    console.log(`Turning on the ${this.device}`);
+  }
+
+  powerOff() {
+    console.log(`Turning off the ${this.device}`);
+  }
+}
+
+const tvRemote = new TVRemote("TV");
+tvRemote.powerOn(); // Output: Turning on the TV
+
+//! 3. Inheritance:
+// Inheritance is a mechanism that allows a class (subclass/derived class) to inherit properties and methods from another class (superclass/base class).
+// It promotes code reuse and establishes a relationship where the subclass inherits characteristics from the superclass.
+class Vehicle {
+  constructor(make, model) {
+    this.make = make;
+    this.model = model;
+  }
+
+  start() {
+    console.log(`${this.make} ${this.model} is starting.`);
+  }
+
+  stop() {
+    console.log(`${this.make} ${this.model} is stopping.`);
+  }
+}
+
+class Car extends Vehicle {
+  constructor(make, model, color) {
+    super(make, model);
+    this.color = color;
+  }
+
+  drive() {
+    console.log(`${this.color} ${this.make} ${this.model} is driving.`);
+  }
+}
+
+const myCar = new Car("Toyota", "Camry", "Blue");
+myCar.start(); // Output: Toyota Camry is starting.
+myCar.drive(); // Output: Blue Toyota Camry is driving.
+
+//! 4.Polymorphism:
+// Polymorphism allows objects of different types to be treated as objects of a common type. It enables the use of a single interface to represent
+// different types of objects, and it can be achieved through method overriding or interfaces.
+class Shape {
+  calculateArea() {
+    throw new Error("calculateArea method must be implemented by subclasses.");
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius) {
+    super();
+    this.radius = radius;
+  }
+
+  calculateArea() {
+    return Math.PI * this.radius ** 2;
+  }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    super();
+    this.width = width;
+    this.height = height;
+  }
+
+  calculateArea() {
+    return this.width * this.height;
+  }
+}
+
+function printArea(shape) {
+  console.log(`Area: ${shape.calculateArea()}`);
+}
+
+const circle = new Circle(5);
+const rectangle = new Rectangle(4, 6);
+
+printArea(circle); // Output: Area: 78.53981633974483
+printArea(rectangle); // Output: Area: 24
