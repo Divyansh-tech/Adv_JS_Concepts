@@ -257,7 +257,7 @@ console.log(myDog instanceof Dog); // Output: true
 // involves the concept of information hiding, where the internal implementation details are concealed from the external world.
 class BankAccount {
   constructor(balance) {
-    let _balance = balance; // Private attribute
+    let _balance = balance; // Private attribute(just for readability).
 
     this.getBalance = function () {
       return _balance;
@@ -390,3 +390,5 @@ const rectangle = new Rectangle(4, 6);
 
 printArea(circle); // Output: Area: 78.53981633974483
 printArea(rectangle); // Output: Area: 24
+
+
